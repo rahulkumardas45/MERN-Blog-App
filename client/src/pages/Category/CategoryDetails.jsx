@@ -30,7 +30,10 @@ const CategoryDetails = () => {
   const {data: categoryData, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/category/all-category`,
   {
     method: 'GET',
-    Credentials: 'include'
+    Credentials: 'include',
+     headers: {
+      'Content-Type': 'application/json'
+        },
     
   },[refresh])
 
