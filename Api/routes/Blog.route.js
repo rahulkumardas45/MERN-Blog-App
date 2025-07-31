@@ -15,7 +15,7 @@ BlogRoute.delete("/delete/:blogid", authenticate, deleteBlog )
 
 // BlogRoute.get("/blogs", showAllBlog)
 
-BlogRoute.get("/get-all", showAllBlog)
+BlogRoute.get("/get-all", authenticate, showAllBlog)
 BlogRoute.get("/get-blog/:slug", getBlog)
 BlogRoute.get("/get-related-blog/:category/:blog", getRelatedBlog)
 BlogRoute.get("/get-blog-by-category/:category", getRelatedbycategory)
