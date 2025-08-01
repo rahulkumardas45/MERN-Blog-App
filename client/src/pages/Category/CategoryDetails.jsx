@@ -32,6 +32,7 @@ const CategoryDetails = () => {
     method: 'GET',
     Credentials: 'include',
      headers: {
+       origin: getEnv("VITE_API_BASE_URL"),
       'Content-Type': 'application/json'
         },
     
