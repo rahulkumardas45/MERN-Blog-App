@@ -1,12 +1,14 @@
 import { getEnv } from '@/helpers/getEnv.js';
+import { RouteSignIn } from '@/helpers/RouteName';
 import { showToast } from '@/helpers/showtoast';
 import { useFetch } from '@/hooks/useFetch.js';
 import React, { useEffect, useState } from 'react'
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const LikeCount = ({props}) => {
-
+     const navigate = useNavigate()
     const [likeCount, setLikeCount] = useState(0)
     const [isLiked, setIsLiked] = useState(false)
 
@@ -36,6 +38,8 @@ const {data: blogLikeCount, loading, error} = useFetch(`${getEnv("VITE_API_BASE_
         try {
             if(!user.isLoggedIn){
                 alert('Please login to like this blog')
+               return navigate(RouteSignIn)
+
             }
 
             const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/blog-like/do-like`,{
