@@ -1,7 +1,7 @@
 import express from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import mongoose from 'mongoose';
 import AuthRoute from './routes/Auth.route.js';
 import UserRoute from './routes/User.route.js';
@@ -20,12 +20,13 @@ app.use(express.json());
 app.use(cors(
   {
   
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: process.env.FRONTEND_URL || `http://localhost:5173`,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
  
 
   }
+
 ));
 
 

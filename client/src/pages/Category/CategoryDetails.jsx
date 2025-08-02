@@ -27,16 +27,18 @@ const CategoryDetails = () => {
 
   const [refresh, setRefresh] = useState(false)
     
-  const {data: categoryData, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/category/all-category`,
+  const {data:categoryData, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/category/all-category`,
   {
     method: 'GET',
     Credentials: 'include',
      headers: {
-       origin: getEnv("VITE_API_BASE_URL"),
+      
       'Content-Type': 'application/json'
-        },
+        }
     
   },[refresh])
+
+  
 
 const handleDelete = async(id)=>{
   const response =await deleteData(`${getEnv("VITE_API_BASE_URL")}/category/delete/${id}`)
