@@ -4,7 +4,7 @@ import { Await, Link, useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
 import { MdLogin } from 'react-icons/md';
 import SearchBox from './SearchBox';
-import { RouteBlogAdd, RouteIndex, RouteProfile, RouteSignIn } from '@/helpers/RouteName.js';
+import { RouteBlogAdd, RouteGemini, RouteIndex, RouteProfile, RouteSignIn } from '@/helpers/RouteName.js';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -93,6 +93,14 @@ const toggleSearch =()=>{
         >
           <IoMdSearch size='20'/>
 
+        </div>
+
+        <div className='bg-gray-500'>
+          <Link  to={RouteGemini}>
+           <button className='bg-gray-500'>
+            Learn With Gemini
+           </button>
+        </Link>
         </div>
 
 

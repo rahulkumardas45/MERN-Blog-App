@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from './components/ui/button'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './Layout/Layout'
-import { RouteAddCategory, RouteBlog, RouteBlogAdd, RouteBlogByCategory, RouteBlogDetails, RouteBlogEdit,  RouteCategoryDetails, RouteCommentDetails, RouteEditCategory, RouteIndex, RouteProfile, RouteSearch, RouteSignIn, RouteSignUp, RouteUserDetails } from './helpers/RouteName.js'
+import { RouteAddCategory, RouteBlog, RouteBlogAdd, RouteBlogByCategory, RouteBlogDetails, RouteBlogEdit,  RouteCategoryDetails, RouteCommentDetails, RouteEditCategory, RouteGemini, RouteIndex, RouteProfile, RouteSearch, RouteSignIn, RouteSignUp, RouteUserDetails } from './helpers/RouteName.js'
 import Index from './pages/Index'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
@@ -20,6 +20,7 @@ import Comments from './pages/Comments'
 import Users from './pages/Users'
 import AuthUserProtection from './components/AuthUserProtection'
 import AuthUserProtectiononlyAdmin from './components/AuthUserProtectiononlyAdmin'
+import Geminiservice from './pages/geminiservice'
 
 
 const App = () => {
@@ -65,6 +66,8 @@ const App = () => {
      </Route>
     <Route path={RouteSignIn} element={<SignIn/>} />
     <Route path={RouteSignUp} element={<SignUp/>} />
+    <Route path={RouteGemini} element={<Geminiservice/>} />
+
 
      </Routes>
     </BrowserRouter>

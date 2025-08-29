@@ -58,5 +58,6 @@ export const RouteSearch= (q)=>{
 
 export const RouteCommentDetails= "/comments"
 export const RouteUserDetails= "/users"
-    
+export const RouteGemini= "/gemini"
+
 
