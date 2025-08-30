@@ -95,13 +95,18 @@ const toggleSearch =()=>{
 
         </div>
 
-        <div className='bg-gray-500'>
-          <Link  to={RouteGemini}>
-           <button className='bg-gray-500'>
-            Learn With Gemini
-           </button>
-        </Link>
-        </div>
+<div className="text-center mt-2">
+  <Link to={RouteGemini}>
+    <button className="relative px-8 py-3 text-lg font-semibold text-white rounded-2xl 
+                       bg-gradient-to-r from-purple-500 to-pink-600 
+                       shadow-lg shadow-pink-500/30 
+                       transition-transform duration-300 
+                       hover:scale-105 hover:shadow-pink-600/50">
+      Learn With Gemini
+    </button>
+  </Link>
+</div>
+
 
 
        {!user.isLoggedIn ?
