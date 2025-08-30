@@ -56,6 +56,12 @@ function App() {
 
   const API_KEY = import.meta.env.VITE_GEMINI_APIKEY;
 
+    if (!API_KEY) {
+      setAnswer("API key is missing. Please set the VITE_GEMINI_APIKEY environment variable.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
      
          const response =  await axios({

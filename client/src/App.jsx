@@ -20,7 +20,7 @@ import Comments from './pages/Comments'
 import Users from './pages/Users'
 import AuthUserProtection from './components/AuthUserProtection'
 import AuthUserProtectiononlyAdmin from './components/AuthUserProtectiononlyAdmin'
-import Geminiservice from './pages/geminiservice'
+import Geminiservice from './pages/Geminiservice'
 
 
 const App = () => {
