@@ -43,7 +43,7 @@ const FormattedAnswer = ({ text }) => {
 };
 
 
-function App() {
+function Geminiservice() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -148,5 +148,5 @@ function App() {
   );
 }
 
-export default App;
+export default Geminiservice;
 
