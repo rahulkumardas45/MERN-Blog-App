@@ -53,10 +53,13 @@ function App() {
     setIsLoading(true);
     setAnswer(""); 
 
+
+  const API_KEY = import.meta.env.VITE_GEMINI_APIKEY;
+
     try {
      
          const response =  await axios({
-            url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyATyMm5wepVCi-xYicjJgoj7vvw00rquK0",
+            url:`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
             method:"post",
             data: {"contents" : [
       {
