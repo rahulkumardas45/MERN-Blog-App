@@ -20,12 +20,15 @@ import Comments from './pages/Comments'
 import Users from './pages/Users'
 import AuthUserProtection from './components/AuthUserProtection'
 import AuthUserProtectiononlyAdmin from './components/AuthUserProtectiononlyAdmin'
-import Geminiservice from './pages/Geminiservice'
+import FloatingChat from "./components/FloatingChat";
+
+
 
 
 const App = () => {
   return (
     <BrowserRouter>
+<FloatingChat />
      <Routes>
      <Route path= {RouteIndex} element={<Layout/>}>
     <Route index element={<Index/>} />
@@ -66,7 +69,7 @@ const App = () => {
      </Route>
     <Route path={RouteSignIn} element={<SignIn/>} />
     <Route path={RouteSignUp} element={<SignUp/>} />
-    <Route path={RouteGemini} element={<Geminiservice/>} />
+
 
 
      </Routes>
