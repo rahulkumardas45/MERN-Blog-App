@@ -15,7 +15,7 @@ const ChatbotPopup = ({ close }) => {
         <div className="flex items-center gap-2 font-semibold">
           🤖 Gemini Assistant
         </div>
-        <button onClick={close} className="text-lg">✖</button>
+        <button onClick={close} className="text-lg text-gray-800">✖</button>
       </div>
 
       {/* Chat */}

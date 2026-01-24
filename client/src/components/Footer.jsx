@@ -2,12 +2,36 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className=" text-sm text-center bg-gray-50 w-full fixed py-4 ">
-      @ Copyright 2025 | Designed & Developed By: <a
-       href="https://www.youtube.com/@Iiitian_rahul
-      " className='font-bold'>RahulKumar</a>
-    </div>
-   
+    <footer className="
+      w-full
+      fixed bottom-0 left-0
+      bg-gray-50
+      border-t
+      text-sm
+      text-center
+      py-3
+      text-gray-600
+      dark:bg-gray-900
+      dark:text-gray-400
+    ">
+      <span>
+        © 2025 | Designed & Developed by{' '}
+        <a
+          href="https://www.youtube.com/@Iiitian_rahul"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            font-semibold
+            text-green-600
+            hover:text-green-700
+            hover:underline
+            transition
+          "
+        >
+          Rahul Kumar
+        </a>
+      </span>
+    </footer>
   )
 }
 

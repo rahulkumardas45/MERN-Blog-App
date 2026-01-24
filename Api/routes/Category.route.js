@@ -8,7 +8,7 @@ const CategoryRoute = express.Router();
 
 
 
-CategoryRoute.post("/add", onlyAdmin, addCategory )
+CategoryRoute.post("/add", addCategory )
 CategoryRoute.put("/update/:categoryid", onlyAdmin, updateCategory )
 CategoryRoute.get("/show/:categoryid", onlyAdmin, showCategory )
 CategoryRoute.delete("/delete/:categoryid", onlyAdmin, deleteCategory )

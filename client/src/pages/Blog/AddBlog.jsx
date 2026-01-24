@@ -232,14 +232,13 @@ if(loading) return <Loading/>
 
 <div className='mb-3 mr-35 mt-10'>
 
-  <FormField
+ <FormField
   control={form.control}
   name="blogContent"
   render={() => (
     <FormItem>
       <FormLabel>Blog Content</FormLabel>
 
-      {/* DO NOT wrap Editor in FormControl */}
       <Editor
         initialData=""
         onChange={handleEditorData}
@@ -249,6 +248,7 @@ if(loading) return <Loading/>
     </FormItem>
   )}
 />
+
 
  
 </div>
