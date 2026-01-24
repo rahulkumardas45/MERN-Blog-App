@@ -139,7 +139,7 @@ const handleFileSelection = async(files)=>{
 if(loading) return <Loading/>
 
   return (
-      <Card className="md:w-auto w-90 md: ml-10 ml-0">
+      <Card className="md:w-auto w-90 md: ml-10 ">
        <CardContent>
 
    <h1 className='text-2xl font-bold text-center text-gray-500'>Add Blog</h1>
@@ -232,20 +232,24 @@ if(loading) return <Loading/>
 
 <div className='mb-3 mr-35 mt-10'>
 
-   <FormField 
-          control={form.control}
-          name="blogContent"
-          render={({ field }) => (
-            <FormItem >
-              <FormLabel>Blog Content</FormLabel>
-              <FormControl  className = "">
-              <Editor  props={{initialData: '', onChange :handleEditorData}}/>
-              </FormControl>
-              
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+  <FormField
+  control={form.control}
+  name="blogContent"
+  render={() => (
+    <FormItem>
+      <FormLabel>Blog Content</FormLabel>
+
+      {/* DO NOT wrap Editor in FormControl */}
+      <Editor
+        initialData=""
+        onChange={handleEditorData}
+      />
+
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
  
 </div>
 

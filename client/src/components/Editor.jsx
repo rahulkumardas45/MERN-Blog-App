@@ -14,7 +14,7 @@ import {
 	BlockQuote,
 	BlockToolbar,
 	Bold,
-	CloudServices,
+	
 	Code,
 	Essentials,
 	FindAndReplace,
@@ -79,10 +79,8 @@ import 'ckeditor5/ckeditor5.css';
 
 // import './App.css';
 
-const LICENSE_KEY =
-	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NTM5MTk5OTksImp0aSI6IjlhMjQ0NjI0LWVmYTItNDFkNi05MWZkLTFmMGY0NjM1YjhiOSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6IjgxNjhmZWIzIn0.uI-kCurtlqrJC4g3BX3GTVhZTGQJ9DNjzMFL1mrE2HIrjgh_Yv9BZj9wYgwfvfh2mDD65s99I9-tsXaCObpO5w';
 
-export default function Editor({props}) {
+export default function Editor({ initialData, onChange }){
 	const editorContainerRef = useRef(null);
 	const editorRef = useRef(null);
 	const editorWordCountRef = useRef(null);
@@ -145,73 +143,73 @@ export default function Editor({props}) {
 					shouldNotGroupWhenFull: false
 				},
 				plugins: [
-					Autoformat,
-					AutoImage,
-					Autosave,
-					BalloonToolbar,
-					BlockQuote,
-					BlockToolbar,
-					Bold,
-					CloudServices,
-					Code,
-					Essentials,
-					FindAndReplace,
-					FontBackgroundColor,
-					FontColor,
-					FontFamily,
-					FontSize,
-					FullPage,
-					Fullscreen,
-					GeneralHtmlSupport,
-					Heading,
-					HtmlComment,
-					HtmlEmbed,
-					ImageBlock,
-					ImageCaption,
-					ImageInline,
-					ImageInsertViaUrl,
-					ImageResize,
-					ImageStyle,
-					ImageTextAlternative,
-					ImageToolbar,
-					ImageUpload,
-					Indent,
-					IndentBlock,
-					Italic,
-					Link,
-					LinkImage,
-					List,
-					ListProperties,
-					PageBreak,
-					Paragraph,
-					PlainTableOutput,
-					RemoveFormat,
-					ShowBlocks,
-					SourceEditing,
-					SpecialCharacters,
-					SpecialCharactersArrows,
-					SpecialCharactersCurrency,
-					SpecialCharactersEssentials,
-					SpecialCharactersLatin,
-					SpecialCharactersMathematical,
-					SpecialCharactersText,
-					Strikethrough,
-					Subscript,
-					Superscript,
-					Table,
-					TableCaption,
-					TableCellProperties,
-					TableColumnResize,
-					TableLayout,
-					TableProperties,
-					TableToolbar,
-					TextPartLanguage,
-					TextTransformation,
-					Title,
-					TodoList,
-					Underline,
-					WordCount
-				],
+	Autoformat,
+	AutoImage,
+	Autosave,
+	BalloonToolbar,
+	BlockQuote,
+	BlockToolbar,
+	Bold,
+	Code,
+	Essentials,
+	FindAndReplace,
+	FontBackgroundColor,
+	FontColor,
+	FontFamily,
+	FontSize,
+	FullPage,
+	Fullscreen,
+	GeneralHtmlSupport,
+	Heading,
+	HtmlComment,
+	HtmlEmbed,
+	ImageBlock,
+	ImageCaption,
+	ImageInline,
+	ImageInsertViaUrl,
+	ImageResize,
+	ImageStyle,
+	ImageTextAlternative,
+	ImageToolbar,
+	ImageUpload,
+	Indent,
+	IndentBlock,
+	Italic,
+	Link,
+	LinkImage,
+	List,
+	ListProperties,
+	PageBreak,
+	Paragraph,
+	PlainTableOutput,
+	RemoveFormat,
+	ShowBlocks,
+	SourceEditing,
+	SpecialCharacters,
+	SpecialCharactersArrows,
+	SpecialCharactersCurrency,
+	SpecialCharactersEssentials,
+	SpecialCharactersLatin,
+	SpecialCharactersMathematical,
+	SpecialCharactersText,
+	Strikethrough,
+	Subscript,
+	Superscript,
+	Table,
+	TableCaption,
+	TableCellProperties,
+	TableColumnResize,
+	TableLayout,
+	TableProperties,
+	TableToolbar,
+	TextPartLanguage,
+	TextTransformation,
+	Title,
+	TodoList,
+	Underline,
+	WordCount
+],
+
 				balloonToolbar: ['bold', 'italic', '|', 'link', '|', 'bulletedList', 'numberedList'],
 				blockToolbar: [
 					'fontSize',
@@ -315,9 +313,9 @@ export default function Editor({props}) {
 						'resizeImage'
 					]
 				},
-				initialData: props?.initialData || '' ,
+				initialData: initialData || '' ,
 					
-				licenseKey: LICENSE_KEY,
+				
 				link: {
 					addTargetToExternalLinks: true,
 					defaultProtocol: 'https://',
@@ -347,7 +345,8 @@ export default function Editor({props}) {
 	}, [isLayoutReady]);
 
 	return (
-		<div className="main-containermd: md:w-240 w-80">
+		<div className="main-container md:w-[960px] w-[320px]">
+
 			<div
 				className="editor-container editor-container_classic-editor editor-container_include-block-toolbar editor-container_include-word-count editor-container_include-fullscreen"
 				ref={editorContainerRef}
@@ -356,17 +355,11 @@ export default function Editor({props}) {
 					<div ref={editorRef}>
 						{editorConfig && (
 							<CKEditor
-							  onChange = {props.onChange}
-								onReady={editor => {
-									const wordCount = editor.plugins.get('WordCount');
-									editorWordCountRef.current.appendChild(wordCount.wordCountContainer);
-								}}
-								onAfterDestroy={() => {
-									Array.from(editorWordCountRef.current.children).forEach(child => child.remove());
-								}}
-								editor={ClassicEditor}
-								config={editorConfig}
-							/>
+  onChange={onChange}
+  editor={ClassicEditor}
+  config={editorConfig}
+/>
+
 						)}
 					</div>
 				</div>
