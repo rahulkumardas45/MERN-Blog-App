@@ -38,7 +38,7 @@ const Profile = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-  const {data:userData, loading ,error} = useFetch(`${getEnv("VITE_API_BASE_URL")}/user/get-user/${user.user._id}`,
+  const {data:userData, loading ,error} = useFetch(`${getEnv("VITE_API_BASE_URL")}/user/get-user/${user?.user?._id}`,
   {
     method: 'get',
     credentials: "include",
