@@ -9,7 +9,7 @@ import CategoryRoute from './routes/Category.route.js';
 import BlogRoute from './routes/Blog.route.js';
 import CommentRoute from './routes/Comment.route.js';
 import BlogLikeRoute from './routes/Bloglike.route.js';
- import GeminiRoute from './routes/Gemini.routes.js';
+import GeminiRoute from './routes/Gemini.routes.js';
 
 dotenv.config();// IF I NOT SET UP DOTENV THEN  WE WILL NOT BE ABLE TO ACCESS ENVIRONMENT VARIABLES
 
