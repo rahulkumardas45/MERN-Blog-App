@@ -15,7 +15,7 @@ const Footer = () => {
       dark:text-gray-400
     ">
       <span>
-        © 2025 | Designed & Developed by{' '}
+        © 2026 | Designed & Developed by{' '}
         <a
           href="https://www.youtube.com/@Iiitian_rahul"
           target="_blank"
