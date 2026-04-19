@@ -4,25 +4,31 @@ import BlogLike from "../models/BlogLike.model.js";
 export const doLike = async (req, res, next)=>{
     try {
         const {user, blogid} = req.body;
-        let like
-         like = await BlogLike.findOne({user, blogid})
+
+         let like = await BlogLike.findOne({user, blogid})
         
          if(!like){
             const saveLike = new BlogLike({
                 user, blogid
             })
 
-          like =  await saveLike.save()
+          await saveLike.save()
+          // increment the like count in redis
+          await redisClient.incr(`likes:${blogid}`);
+
          }else{
             await BlogLike.deleteOne({user, blogid})
 
-
+            // decrement the like count in redis
+            await redisClient.decr(`likes:${blogid}`);
          }
 
-         const likecount = await BlogLike.countDocuments({blogid})
+         let likecount = await redisClient.get(`likes:${blogid}`);
+
+
    res.status(200)
    .json({
-    likecount
+    likecount: Number(likecount)
    })
 
 
@@ -34,28 +40,39 @@ export const doLike = async (req, res, next)=>{
 }
 
 export const likeCount = async (req, res, next)=>{
-    try {
-        const { blogid, userid} = req.params;
+  try {
+    const { blogid, userid } = req.params;
 
-        const likecount = await BlogLike.countDocuments({blogid})
+    // 🔥 check Redis first
+    let likecount = await redisClient.get(`likes:${blogid}`);
 
-        let isUserliked = false
-        if(userid){
-            const getuserlike = await BlogLike.countDocuments({blogid,user: userid})
-            if(getuserlike>0){
-                isUserliked= true
-            }
-        }
+    if(!likecount){
+      console.log("📦 From DB");
 
-        res.status(200)
-        .json({
-            likecount,
-            isUserliked
-            })
+      likecount = await BlogLike.countDocuments({blogid});
 
-
-    } catch (error) {
-        next(handleError(500, error.message))
+      // store in Redis
+      await redisClient.setEx(`likes:${blogid}`, 300, likecount);
+    } else {
+      console.log("⚡ From Redis");
     }
-}
+
+    let isUserliked = false;
+
+    if(userid){
+      const getuserlike = await BlogLike.countDocuments({blogid, user: userid});
+      if(getuserlike > 0){
+        isUserliked = true;
+      }
+    }
+
+    res.status(200).json({
+      likecount: Number(likecount),
+      isUserliked
+    });
+
+  } catch (error) {
+    next(handleError(500, error.message))
+  }
+};
 

@@ -9,7 +9,9 @@ import CategoryRoute from './routes/Category.route.js';
 import BlogRoute from './routes/Blog.route.js';
 import CommentRoute from './routes/Comment.route.js';
 import BlogLikeRoute from './routes/Bloglike.route.js';
-import GeminiRoute from './routes/Gemini.routes.js';
+
+ import GeminiRoute from './routes/Gemini.routes.js'
+import { connectRedis } from './config/redis.js';
 
 dotenv.config();// IF I NOT SET UP DOTENV THEN  WE WILL NOT BE ABLE TO ACCESS ENVIRONMENT VARIABLES
 
@@ -37,17 +39,23 @@ app.use("/api/category", CategoryRoute);
 app.use("/api/blog", BlogRoute);
 app.use("/api/comment", CommentRoute);
 app.use("/api/blog-like", BlogLikeRoute);
-app.use("/api/bog", GeminiRoute);
+ app.use("/api/bog", GeminiRoute);
 
 
 
 
 //conect database
 mongoose.connect(process.env.MONGODB_CONN, {dbName: 'YT-MERN-BLOG'})
-.then(()=>{
+.then(async()=>{
   console.log('Database connected successfully');
+ try {
+    await connectRedis();
+  } catch (err) {
+    console.log("Redis not running, skipping...");
+  }
 })
-.catch(()=>{
+.catch((err)=>{
+   console.error('Database connection error:', err);
   console.log('Database connection failed');
 })
 
