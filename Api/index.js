@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cors(
   {
   
-  origin: process.env.FRONTEND_URL || "http://localhost:5173" || "https://mern-blog-app-frontend-nu.vercel.app",
+  origin: process.env.FRONTEND_URL || "http://localhost:5173" || "https://mern-blog-app-frontend-nu.vercel.app" || "https://www.globalblog.me",
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 
