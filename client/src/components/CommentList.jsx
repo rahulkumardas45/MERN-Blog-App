@@ -1,22 +1,45 @@
 import { getEnv } from '@/helpers/getEnv.js'
 import { useFetch } from '@/hooks/useFetch.js'
-import React from 'react'
+import React, { useState } from 'react'
 import Loading from './Loading'
 import { Avatar } from './ui/avatar'
 import { AvatarImage } from '@radix-ui/react-avatar'
 import usericon from '@/assets/images/user.png'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
+import { Button } from './ui/button'
+import { RiDeleteBinLine } from 'react-icons/ri'
+import { deleteData } from '@/helpers/handle.Delete.js'
+import { showToast } from '@/helpers/showtoast.js'
 
 const CommentList = ({props}) => {
     
 const user = useSelector(state => state.user)
+const [refresh, setRefresh] = useState(false)
+const currentUserId = user?.user?._id
+const isAdmin = user?.user?.role === 'admin'
+
+const canDeleteComment = (comment) => {
+  const commentUserId = comment?.user?._id || comment?.user
+  return Boolean(isAdmin || (currentUserId && commentUserId && commentUserId.toString() === currentUserId.toString()))
+}
+
+const handleDelete = async (commentId) => {
+  const response = await deleteData(`${getEnv("VITE_API_BASE_URL")}/comment/delete/${commentId}`)
+
+  if (response) {
+    setRefresh(!refresh)
+    showToast("success", "Comment deleted")
+  } else {
+    showToast("error", "Failed to delete comment")
+  }
+}
 
  const {data, loading, error } = useFetch(`${getEnv("VITE_API_BASE_URL")}/comment/get/${props.blogid}`,
        {
          method: 'GET',
          Credentials: 'include'
-       })
+       }, [props.blogid, refresh, props.newComment])
 
   
 
@@ -48,7 +71,7 @@ const user = useSelector(state => state.user)
                     <Avatar>
                         <AvatarImage src={user?.user.avatar || usericon}/>
                     </Avatar>
-                    <div>
+                    <div className="flex-1">
                         <p className='font-bold '>{user?.user.name}</p>
                         <p>{moment(props.newComment?.createdAt).format('DD-MM-YYYY')}</p>
                         <div className='mt-5 '>
@@ -73,7 +96,7 @@ const user = useSelector(state => state.user)
                     <Avatar>
                         <AvatarImage src={comment?.user?.avatar|| usericon}/>
                     </Avatar>
-                    <div>
+                    <div className="flex-1">
                         <p className='font-bold'>{comment?.user?.name}</p>
                         <p >{moment(comment?.createdAt).format('DD-MM-YYYY')}</p>
                         <div className=' mt-5'>
@@ -81,6 +104,16 @@ const user = useSelector(state => state.user)
                         </div>
     
                     </div>
+                    {canDeleteComment(comment) && (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8 shrink-0 hover:bg-red-500 hover:text-white"
+                        onClick={() => handleDelete(comment._id)}
+                      >
+                        <RiDeleteBinLine />
+                      </Button>
+                    )}
                 </div>
      )
     }

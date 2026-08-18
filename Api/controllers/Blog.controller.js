@@ -4,6 +4,23 @@ import { encode } from 'entities'
 import Blog from "../models/blog.model.js";
 import Category from "../models/category.model.js";
 import redisClient from "../config/redis.js";
+import User from "../models/user.model.js";
+
+const canManageBlog = async (req, blog) => {
+    if (!req.user?.id || !blog?.author) return false;
+
+    if (req.user.role === 'admin') return true;
+
+    const loggedInUser = await User.findById(req.user.id).select('role').lean().exec();
+    if (loggedInUser?.role === 'admin') return true;
+
+    return blog.author.toString() === req.user.id.toString();
+}
+
+const clearBlogCache = async (...keys) => {
+    await redisClient.del("allBlogs");
+    await Promise.all(keys.filter(Boolean).map((key) => redisClient.del(key)));
+}
 
 export const addBlog = async (req, res, next)=>{
     try {
@@ -29,7 +46,7 @@ export const addBlog = async (req, res, next)=>{
         
 
         const blog = await Blog.create({
-            author: data.author,
+            author: req.user.id,
             category: data.category,
             title: data.title,
             slug: data.slug,
@@ -38,6 +55,7 @@ export const addBlog = async (req, res, next)=>{
         })
 
         await blog.save()
+        await clearBlogCache(`blog:${blog.slug}`)
 
         res.status(200)
         .json({
@@ -59,7 +77,11 @@ export const editBlog = async (req, res, next)=>{
         const blog = await Blog.findById(blogid).populate('category', 'name')
 
         if(!blog){
-            next(handleError(404, 'Data not found.'))
+            return next(handleError(404, 'Data not found.'))
+        }
+
+        if (!(await canManageBlog(req, blog))) {
+            return next(handleError(403, 'You can edit only your own blog post.'))
         }
 
         res.status(200)
@@ -79,6 +101,15 @@ export const updateBlog = async (req, res, next)=>{
     try {
         const {blogid}= req.params
           const data = JSON.parse(req.body.data)
+          const blog = await Blog.findById(blogid)
+
+        if(!blog){
+            return next(handleError(404, 'Blog data not found.'))
+        }
+
+        if (!(await canManageBlog(req, blog))) {
+            return next(handleError(403, 'You can update only your own blog post.'))
+        }
 
         let featuredImage= ''
 
@@ -97,19 +128,20 @@ export const updateBlog = async (req, res, next)=>{
             featuredImage = uploadResult.secure_url
           
         }
-        
-        const blog = await Blog.findByIdAndUpdate(blogid,{
-            $set:{
-                category: data.category,
-                title:data.title,
-                slug: data.slug,
-                blogContent: encode(data.blogContent) ,
-                featuredImage: featuredImage
 
-            }
-        })
+        const oldSlug = blog.slug
+
+        blog.category = data.category
+        blog.title = data.title
+        blog.slug = data.slug
+        blog.blogContent = encode(data.blogContent)
+
+        if(featuredImage){
+            blog.featuredImage = featuredImage
+        }
 
         await blog.save()
+        await clearBlogCache(`blog:${oldSlug}`, `blog:${blog.slug}`)
     
         res.status(200)
         .json({
@@ -128,7 +160,19 @@ export const updateBlog = async (req, res, next)=>{
 export const deleteBlog = async (req, res, next)=>{
     try {
         const {blogid} = req.params
+        const blog = await Blog.findById(blogid)
+
+        if(!blog){
+            return next(handleError(404, 'Blog data not found.'))
+        }
+
+        if (!(await canManageBlog(req, blog))) {
+            return next(handleError(403, 'You can delete only your own blog post.'))
+        }
+
         await Blog.findByIdAndDelete(blogid)
+        await clearBlogCache(`blog:${blog.slug}`)
+
         res.status(200)
         .json({
             success: true,

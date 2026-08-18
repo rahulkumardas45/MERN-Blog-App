@@ -1,9 +1,6 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-
-import { RouteAddCategory, RouteEditCategory } from '@/helpers/RouteName.js'
 
 import {
   Table,
@@ -17,16 +14,24 @@ import {
 import { useFetch } from '@/hooks/useFetch.js'
 import { getEnv } from '@/helpers/getEnv.js'
 import Loading from '@/components/Loading'
-import { FiEdit } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { deleteData } from '@/helpers/handle.Delete.js'
 import { showToast } from '@/helpers/showtoast.js'
 import moment from 'moment'
+import { useSelector } from 'react-redux'
 
 
 const Comments = () => {
 
   const [refresh, setRefresh] = useState(false)
+  const user = useSelector((state) => state.user)
+  const currentUserId = user?.user?._id
+  const isAdmin = user?.user?.role === 'admin'
+
+  const canDeleteComment = (comment) => {
+    const commentUserId = comment?.user?._id || comment?.user
+    return Boolean(isAdmin || (currentUserId && commentUserId && commentUserId.toString() === currentUserId.toString()))
+  }
     
   const {data, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/comment/get-all-comment`,
   {
@@ -80,16 +85,19 @@ if(loading) return <Loading/>
             <TableCell>{comment?.blogid?.title}</TableCell>
             <TableCell>{comment?.user?.name}</TableCell>
              <TableCell>{moment(comment?.createdAt).format('DD-MM-YYYY')}</TableCell>
-              <TableCell>{comment?.comment}</TableCell>
+            <TableCell>{comment?.comment}</TableCell>
             <TableCell className="flex gap-2">
-              <Button variant= "outline" className="hover:bg-violet-500 hover:text-white" asChild size="icon"  onClick={()=>{
+              {canDeleteComment(comment) ? (
+              <Button variant= "outline" className="hover:bg-violet-500 hover:text-white" size="icon"  onClick={()=>{
                 handleDelete(comment._id)
                }}>
-                              <Link to=''>
                               <RiDeleteBinLine />
-                              
-                              </Link>
                             </Button>
+              ) : (
+                <span className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-400">
+                  Own comment only
+                </span>
+              )}
             </TableCell>
           </TableRow>
       )

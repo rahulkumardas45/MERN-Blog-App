@@ -1,13 +1,25 @@
 import { handleError } from "../helpers/handleError.js"
 import Comment from "../models/comment.model.js"
+import User from "../models/user.model.js"
+
+const canDeleteComment = async (req, comment) => {
+  if (!req.user?.id || !comment?.user) return false
+
+  if (req.user.role === 'admin') return true
+
+  const loggedInUser = await User.findById(req.user.id).select('role').lean().exec()
+  if (loggedInUser?.role === 'admin') return true
+
+  return comment.user.toString() === req.user.id.toString()
+}
 
 export const addComment = async(req, res, next)=>{
 
    try {
-     const { user, blogid, comment} = req.body
+     const { blogid, comment} = req.body
 
      const commentdata = await Comment.create({
-           user: user,
+           user: req.user.id,
            blogid: blogid,
            comment: comment
      })
@@ -97,7 +109,17 @@ const commentnumber = await Comment.countDocuments({blogid})
 
    try {
     const {commentid} = req.params
-   const comments = await Comment.findByIdAndDelete(commentid)
+   const comment = await Comment.findById(commentid)
+
+   if(!comment){
+    return next(handleError(404, 'Comment not found'))
+   }
+
+   if (!(await canDeleteComment(req, comment))) {
+    return next(handleError(403, 'You can delete only your own comment.'))
+   }
+
+   await Comment.findByIdAndDelete(commentid)
      res.status(200)
      .json({
       success: true,

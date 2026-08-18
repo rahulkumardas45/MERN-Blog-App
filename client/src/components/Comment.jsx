@@ -36,7 +36,7 @@ const Comment = ({props}) => {
     
              async function onSubmit(values) {
                     try {
-                        const newValues = {...values, blogid:props.blogid, user: user.user._id}
+                        const newValues = {...values, blogid:props.blogid}
                        const response = await fetch(`${getEnv("VITE_API_BASE_URL")}/comment/add`, {
                         method:'POST',
                         credentials: 'include',
