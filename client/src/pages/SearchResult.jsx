@@ -12,7 +12,7 @@ const SearchResult = () => {
     
     const q = searchParams.get('q')
      
-    const {data: blogData, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/search?q=${q}`,
+    const {data: blogData, loading, }= useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/search?q=${q}`,
     {
       method: 'GET',
       Credentials: 'include'
