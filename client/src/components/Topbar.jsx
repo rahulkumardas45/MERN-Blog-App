@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import logo from "@/assets/images/logo-white.png"
-import { Await, Link, useNavigate } from 'react-router-dom'
+import logo from "@/assets/images/logo-dark.png"
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
 import { MdLogin } from 'react-icons/md';
 import SearchBox from './SearchBox';
-import { RouteBlogAdd, RouteGemini, RouteIndex, RouteProfile, RouteSignIn } from '@/helpers/RouteName.js';
+import { RouteBlog, RouteBlogAdd, RouteIndex, RouteProfile, RouteSearch, RouteSignIn } from '@/helpers/RouteName.js';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -19,7 +19,7 @@ import {
 }from "@/components/ui/dropdown-menu";
 
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import usericon from "@/assets/images/user.png";
 import { FaRegUser } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
@@ -30,6 +30,7 @@ import { getEnv } from '@/helpers/getEnv';
 import { IoMdSearch } from "react-icons/io";
 import { MdOutlineMenu } from "react-icons/md";
 import { useSidebar } from './ui/sidebar';
+import { Sparkles } from 'lucide-react';
 
 
 
@@ -56,7 +57,7 @@ function Topbar() {
 
 
   } catch (error) {
-showToast("error", data.message)
+showToast("error", error.message)
     
   }
 
@@ -72,28 +73,49 @@ const toggleSearch =()=>{
     setshowSearch(!showSearch)
 }
 
-  return (
-    <div className='flex justify-between items-center h-16 fixed md:w-full w-100  z-20 bg-white px-5 border-b '>
-         <div className='flex justify-center items-center gap-2'>
-          <Button onClick={toggleSidebar } className='md-hidden' type='button'>
-          < MdOutlineMenu/>
-          </Button>
-         <Link to={RouteIndex}>
-        <img src={logo} alt="" className='md:w-auto w-100' />
-       </Link>
-         </div>
-       <div className='w-[400px] '>
-        <div className={`md:relative absolute md:block  text-center bg-white left-0 md:ml-0 ml-2 w-full md:top-0 top-13 md:p-0 p-5 ${showSearch? 'block' : 'hidden'} `}>
+const navLinkClass = ({ isActive }) =>
+  `nav-pill flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ${isActive ? 'active' : ''}`
 
+  return (
+    <div className='glass-panel fixed left-0 right-0 top-0 z-30 border-b border-slate-200/70 bg-white/82 shadow-sm shadow-slate-200/70 backdrop-blur-2xl md:left-64'>
+      <div className='flex h-18 min-h-18 w-full items-center gap-3 px-4 sm:px-6'>
+         <div className='flex min-w-0 flex-1 items-center gap-3 md:flex-none'>
+          <Button onClick={toggleSidebar } className='size-10 rounded-full border border-slate-200/80 bg-white/75 p-0 text-slate-700 shadow-sm hover:border-green-300 hover:bg-emerald-50 hover:text-green-700 md:hidden' type='button'>
+          <MdOutlineMenu size={22}/>
+          </Button>
+         <Link to={RouteIndex} className='ai-brand-mark flex items-center gap-3 rounded-full md:hidden'>
+        <img src={logo} alt="Blog app" className='h-9 w-auto' />
+       </Link>
+       <div className="hidden flex-col leading-tight md:flex">
+        <span className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-500">AI Blog Studio</span>
+        <span className="text-sm font-semibold text-slate-500">Modern content workspace</span>
+       </div>
+         </div>
+       <nav className='hidden flex-shrink-0 items-center gap-2 lg:flex'>
+        <NavLink to={RouteIndex} className={navLinkClass}>
+          <span>Home</span>
+        </NavLink>
+        {user.isLoggedIn && (
+          <NavLink to={RouteBlog} className={navLinkClass}>
+            <span>Dashboard</span>
+          </NavLink>
+        )}
+        <NavLink to={RouteSearch()} className={navLinkClass}>
+          <Sparkles size={16} />
+          <span>Explore</span>
+        </NavLink>
+       </nav>
+       <div className='mx-auto hidden min-w-[220px] max-w-2xl flex-1 md:block'>
+        <div className='w-full'>
         <SearchBox/>
         </div>
        </div>
-       <div className='flex items-center gap-5' >
-        <div onClick={toggleSearch} className='md:hidden block'
+       <div className='flex flex-shrink-0 items-center gap-2 sm:gap-3' >
+        <button type="button" onClick={toggleSearch} className='flex size-10 items-center justify-center rounded-full border border-slate-200/80 bg-white/75 p-0 text-slate-700 shadow-sm transition hover:border-green-300 hover:bg-emerald-50 hover:text-green-700 md:hidden'
         >
           <IoMdSearch size='20'/>
 
-        </div>
+        </button>
 
 
 
@@ -103,20 +125,21 @@ const toggleSearch =()=>{
 
 
        {!user.isLoggedIn ?
-         <Button asChild className={"rounded-full bg-green-500 text-white hover:bg-green-600"}>
-          <Link to={RouteSignIn} className='rounded-full bg-gray'>
-          Sign In
+         <Button asChild className={"h-10 rounded-full bg-gradient-to-r from-green-500 to-cyan-500 px-4 text-sm text-white shadow-lg shadow-green-500/20 hover:from-green-600 hover:to-cyan-600 sm:px-5 sm:text-base"}>
+          <Link to={RouteSignIn} className='flex items-center gap-2 rounded-full'>
+          <span className="hidden sm:inline">Sign In</span>
+          <span className="sm:hidden">Sign</span>
           <MdLogin />
           </Link>
          </Button>
          :
        <DropdownMenu>
-  <DropdownMenuTrigger className=" cursor-pointer">
-    <Avatar>
+  <DropdownMenuTrigger className="rounded-full border border-slate-200/80 bg-white/75 p-1 shadow-sm transition hover:border-green-300 hover:shadow-md">
+    <Avatar className="size-9">
   <AvatarImage src={user?.user?.avatar || usericon } />
 </Avatar>
   </DropdownMenuTrigger>
-  <DropdownMenuContent>
+  <DropdownMenuContent className="mr-4 mt-2 min-w-56 border-slate-200/80 bg-white/95 shadow-xl shadow-slate-200/80 backdrop-blur-xl">
     <DropdownMenuLabel>
       <p>{user?.user?.name}</p>
       <p className='text-sm'>{user?.user?.email}</p>
@@ -152,8 +175,11 @@ const toggleSearch =()=>{
 
        }
        </div>
-     
       </div>
+      <div className={`search-panel-mobile border-t border-slate-200/70 bg-white/95 px-4 py-3 shadow-lg shadow-slate-200/70 backdrop-blur-2xl md:hidden ${showSearch ? 'block' : 'hidden'}`}>
+        <SearchBox/>
+      </div>
+    </div>
   )
 }
 

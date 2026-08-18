@@ -4,14 +4,17 @@ const Footer = () => {
   return (
     <footer className="
       w-full
-      fixed bottom-0 left-0
-      bg-gray-50
-      border-t
+      mt-auto
+      bg-slate-950/95
+      border-t border-slate-200/70
+      shadow-[0_-8px_24px_rgba(15,23,42,0.04)]
+      backdrop-blur-xl
+      glass-panel
       text-sm
       text-center
       py-3
-      text-gray-600
-      dark:bg-gray-900
+      text-slate-300
+      dark:bg-slate-950/90
       dark:text-gray-400
     ">
       <span>
