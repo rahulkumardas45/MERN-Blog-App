@@ -44,7 +44,7 @@ const handleDelete = async(id)=>{
      setRefresh(!refresh),
     showToast("success", "Data Deleted")
    }else{
-    showToast("error", "Failed to Delete Data")
+    showToast(error, "Failed to Delete Data")
    }
 }
 

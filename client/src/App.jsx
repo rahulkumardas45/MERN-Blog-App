@@ -20,7 +20,7 @@ import Comments from './pages/Comments'
 import Users from './pages/Users'
 import AuthUserProtection from './components/AuthUserProtection'
 import AuthUserProtectiononlyAdmin from './components/AuthUserProtectiononlyAdmin'
-import FloatingChat from "./components/FloatingChat";
+
 
 
 
@@ -28,7 +28,7 @@ import FloatingChat from "./components/FloatingChat";
 const App = () => {
   return (
     <BrowserRouter>
-<FloatingChat />
+
      <Routes>
      <Route path= {RouteIndex} element={<Layout/>}>
     <Route index element={<Index/>} />

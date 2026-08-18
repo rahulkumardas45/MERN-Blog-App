@@ -20,7 +20,7 @@ export const SingleBlogDetails = () => {
     const {blog, category} = useParams()
     
 
-   const {data, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-blog/${blog}`,
+   const {data, loading}= useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-blog/${blog}`,
         {
           method: 'GET',
           Credentials: 'include'

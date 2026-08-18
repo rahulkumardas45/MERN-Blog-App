@@ -19,6 +19,7 @@ const BlogCard = ({ props }) => {
         className="
           pt-5
           overflow-hidden
+          ai-card
           transition
           duration-300
           hover:-translate-y-1

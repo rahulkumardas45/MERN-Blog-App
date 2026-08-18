@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card'
-import usericon from '@/assets/images/user.png'
+
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import React, { useEffect, useState } from 'react'
@@ -38,7 +38,7 @@ const Profile = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-  const {data:userData, loading ,error} = useFetch(`${getEnv("VITE_API_BASE_URL")}/user/get-user/${user?.user?._id}`,
+  const {data:userData, loading } = useFetch(`${getEnv("VITE_API_BASE_URL")}/user/get-user/${user?.user?._id}`,
   {
     method: 'get',
     credentials: "include",

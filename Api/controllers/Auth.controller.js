@@ -73,6 +73,7 @@ export const Login = async (req, res, next)=>{
     name: user.name,
     email: user.email,
     avatar: user.avatar,
+    role: user.role,
   }, process.env.JWT_SECRET, { expiresIn: '1h' });
    
 
@@ -109,20 +110,20 @@ export const GoogleLogin = async (req, res, next)=>{
           return res.status(400).json({message: 'Please fill all fields'});
       }
       //check if user exists
-      const user = await User.findOne({email});
+      let user = await User.findOne({email});
       if(!user){
         const password = Math.random().toString()//generate a password
         //hash the password
         const hashpassword = bcrypt.hashSync(password, 10);
          //create new user if not exists
-        const newUser = await User.create({
+        user = await User.create({
             name,
             email,
             password: hashpassword,
             avatar
           })
 
-          await newUser.save(); // Save the new user to the database
+          await user.save(); // Save the new user to the database
 
       }
       
@@ -133,6 +134,7 @@ export const GoogleLogin = async (req, res, next)=>{
     name: user.name,
     email: user.email,
     avatar: user.avatar,
+    role: user.role,
   }, process.env.JWT_SECRET, { expiresIn: '1h' });
    
 

@@ -9,7 +9,7 @@ const Index = () => {
    
   // const [refresh, setRefresh] = useState(false)
         
-      const {data: blogData, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all`,
+      const {data: blogData, loading, }= useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all`,
       {
         method: 'GET',
         Credentials: 'include'

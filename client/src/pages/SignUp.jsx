@@ -63,14 +63,14 @@ function SignUp() {
     
     }
   return (
-    <div className='flex justify-center items-center h-screen w-screen'>
-      <Card className="w-[400px] p-5">
+    <div className='app-surface flex min-h-screen w-full items-center justify-center px-4 py-10'>
+      <Card className="ai-card auth-card w-full max-w-[420px] border-slate-200/80 bg-white/90 p-6 shadow-2xl shadow-slate-200/80 backdrop-blur-xl">
         <h3 className="text-2xl font-bold text-center mb-5">Create Your New Account</h3>
    
 <div className="">
   <GoogleLogin/>
   <div className="border my-5 flex justify-center items-center relative">
-    <span  className="absolute bg-white text-sm">Or</span>
+    <span  className="absolute bg-white px-3 text-sm text-gray-500">Or</span>
   </div>
 </div>
 

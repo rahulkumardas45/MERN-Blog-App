@@ -24,9 +24,18 @@ import { showToast } from '@/helpers/showtoast.js'
 import { FiEdit } from 'react-icons/fi'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import moment from 'moment'
+import { useSelector } from 'react-redux'
 
 const BlogDetails = () => {
      const [refresh, setRefresh] = useState(false)
+     const user = useSelector((state) => state.user)
+     const currentUserId = user?.user?._id
+     const isAdmin = user?.user?.role === 'admin'
+
+     const canManageBlog = (blog) => {
+      const authorId = blog?.author?._id || blog?.author
+      return Boolean(isAdmin || (currentUserId && authorId && authorId.toString() === currentUserId.toString()))
+     }
         
       const {data: blogData, loading, error}= useFetch(`${getEnv("VITE_API_BASE_URL")}/blog/get-all`,
       {
@@ -95,6 +104,8 @@ const BlogDetails = () => {
 
             
             <TableCell className="flex gap-2">
+              {canManageBlog(blog) ? (
+              <>
               <Button variant= "outline" className="hover:bg-violet-500 hover:text-white" asChild >
                 <Link to={RouteBlogEdit(blog._id)}>
                 <FiEdit/>
@@ -102,15 +113,18 @@ const BlogDetails = () => {
               </Button>
 
 
-               <Button variant= "outline" className="hover:bg-violet-500 hover:text-white" asChild size="icon" onClick={()=>{
+               <Button variant= "outline" className="hover:bg-violet-500 hover:text-white" size="icon" onClick={()=>{
                 handleDelete(blog._id)
                 
                }}>
-                <Link>
                 <RiDeleteBinLine />
-                </Link>
-               
               </Button>
+              </>
+              ) : (
+                <span className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-400">
+                  Own post only
+                </span>
+              )}
             </TableCell>
           </TableRow>
       )
